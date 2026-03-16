@@ -1,3 +1,4 @@
+import asyncio
 import os
 from datetime import date, datetime, time
 
@@ -278,7 +279,7 @@ async def send_daily_prayers(context: ContextTypes.DEFAULT_TYPE) -> None:
             continue
 
 
-def main() -> None:
+async def main() -> None:
     print("Starting Cuaresma bot")
     application = Application.builder().token(TELEGRAM_TOKEN).build()
 
@@ -288,11 +289,21 @@ def main() -> None:
     job_queue = application.job_queue
     job_queue.run_daily(
         send_daily_prayers,
-        time=time(hour=7, minute=0),
+        time=time(hour=6, minute=0),  # adjust hour as needed
         name="cuaresma_daily_prayers",
     )
 
-    application.run_polling()
+    await application.initialize()
+    await application.start()
+    await application.updater.start_polling()
+    await application.updater.wait_until_closed()
+    await application.stop()
+    await application.shutdown()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
 
 
 if __name__ == "__main__":
