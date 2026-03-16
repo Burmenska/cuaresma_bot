@@ -40,8 +40,6 @@ PRAYERS: list[str] = [
     PRAYERS_DATA["ave_maria"],
 ]
 
-
-
 BOOK_NORMALIZATION = {
     "Génesis": "Génesis",
     "Éxodo": "Éxodo",
@@ -293,18 +291,9 @@ async def main() -> None:
         name="cuaresma_daily_prayers",
     )
 
-    await application.initialize()
-    await application.start()
-    await application.updater.start_polling()
-    await application.updater.wait_until_closed()
-    await application.stop()
-    await application.shutdown()
+    # Single PTB 21.7 entry point
+    await application.run_polling()
 
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-
-
-if __name__ == "__main__":
-    main()
