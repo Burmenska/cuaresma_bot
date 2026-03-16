@@ -54,7 +54,3 @@ ls data
 
 ```bash
 python cuaresma_bot.py
-
-
-
-
