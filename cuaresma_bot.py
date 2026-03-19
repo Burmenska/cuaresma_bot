@@ -291,15 +291,8 @@ async def main() -> None:
         name="cuaresma_daily_prayers",
     )
 
-    # Explicit PTB lifecycle instead of run_polling()
-    await application.initialize()
-    await application.start()
-    await application.updater.start_polling()
-    try:
-        await application.updater.wait_until_closed()
-    finally:
-        await application.stop()
-        await application.shutdown()
+    # Let PTB manage startup/shutdown and polling
+    await application.run_polling()
 
 
 if __name__ == "__main__":
