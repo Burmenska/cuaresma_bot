@@ -1,3 +1,4 @@
+import asyncio
 import os
 from datetime import date, datetime, time
 
@@ -276,7 +277,7 @@ async def send_daily_prayers(context: ContextTypes.DEFAULT_TYPE) -> None:
             continue
 
 
-def main() -> None:
+async def main() -> None:
     print("Starting Cuaresma bot")
     application = Application.builder().token(TELEGRAM_TOKEN).build()
 
@@ -290,8 +291,16 @@ def main() -> None:
         name="cuaresma_daily_prayers",
     )
 
-    application.run_polling()
+    # Explicit PTB lifecycle instead of run_polling()
+    await application.initialize()
+    await application.start()
+    await application.updater.start_polling()
+    try:
+        await application.updater.wait_until_closed()
+    finally:
+        await application.stop()
+        await application.shutdown()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
